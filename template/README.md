@@ -1,8 +1,6 @@
-#questionnaire
+#{{name}}
 
-##questionnaire-client
-
-
-##questionnaire-server
+##{{name}}_client
 
 
+##{{name}}_server
