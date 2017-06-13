@@ -1,0 +1,12 @@
+
+db/*
+
+node_modules
+npm-debug.log
+npm-debug.log.*
+
+.idea
+.tern-project
+
+.DS_Store
+thumbs.db
