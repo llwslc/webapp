@@ -30,11 +30,14 @@ var config = {
   mongodb: {
     host: 'localhost',
     port: 28073,
-    db: 'xxx',
+    db: '{{name}}',
     path: './db',
     log: 'db.log',
-    name: '',
-    pwd: '',
+  },
+
+  // sqlite config
+  sqlite: {
+    path: '{{name}}.db'
   }
 };
 

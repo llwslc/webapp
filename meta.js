@@ -16,17 +16,14 @@ module.exports = {
       type: 'string',
       label: 'Author'
     },
-    mongoose: {
-      type: 'confirm',
-      require: true,
-      message: 'Use mongoose ?',
-      default: true
-    },
-    sqlite: {
-      type: 'confirm',
-      require: true,
-      message: 'Use sqlite ?',
-      default: true
+    dbCfg: {
+      type: 'list',
+      message: 'Pick a db dirver',
+      choices: [
+        'mongoose',
+        'sqlite',
+        'none'
+      ]
     },
   },
   filters: {
