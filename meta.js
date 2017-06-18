@@ -1,37 +1,50 @@
 
+const fs = require(`fs`);
+
 module.exports = {
   prompts: {
     name: {
-      type: 'string',
-      required: true,
-      message: 'Application Name'
+      type: `editor`,
+      message: `Application Name`
     },
     description: {
-      type: 'string',
-      required: false,
-      message: 'Project Description',
-      default: 'A webapp project'
+      type: `editor`,
+      message: `Project Description`,
+      default: `A webapp project`
     },
     author: {
-      type: 'string',
-      label: 'Author'
+      type: `editor`,
+      message: `Author`,
+      default: `llwslc <llwslc@gmail.com>`
     },
     dbCfg: {
-      type: 'list',
-      message: 'Pick a db dirver',
+      type: `list`,
+      message: `Pick a db dirver`,
       choices: [
-        'mongoose',
-        'sqlite',
-        'none'
+        `mongoose`,
+        `sqlite`,
+        `none`
       ]
     },
   },
   filters: {
-    'tasks/install.js': 'rebuild',
-    'app/src/sections/forkJs.js': 'fork',
-    'app/update.js': 'update',
-    'tasks/mac/*': 'installer',
-    'tasks/win/*': 'installer',
+    'server/sqlite/*': `dbCfg !== 'mongoose'`,
+    'server/mongoose/*': `dbCfg !== 'sqlite'`,
+    'server/+(mongoose|sqlite)/*': `dbCfg !== 'none'`,
+  },
+  complete: (data) =>
+  {
+    var oldPath = `${data.destDirName}/server/${data.dbCfg}`;
+    var newPath = `${data.destDirName}/server/db`;
+    if (fs.existsSync(newPath))
+    {
+      console.error(`${oldPath} cant rename ${newPath}!`);
+      console.error(`Because ${newPath} is existed.`);
+    }
+    else
+    {
+      fs.renameSync(oldPath, newPath);
+    }
   },
   completeMessage: `---
 
