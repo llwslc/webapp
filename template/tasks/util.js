@@ -5,6 +5,7 @@ const fs = require('fs');
 const platform = require('os').platform();
 
 var logger = log4js.getLogger();
+var npmLog = log4js.getLogger('npm');
 var mongoLog = log4js.getLogger('mongo');
 var serverLog = log4js.getLogger('server');
 
@@ -35,6 +36,7 @@ module.exports = {
   log4js,
   logger,
   execAsync,
+  npmLog,
   mongoLog,
   serverLog,
   hotEnv,

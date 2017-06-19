@@ -1,6 +1,9 @@
 
 var config = {
 
+  // all package
+  allPackage: ['client', 'server'],
+
   // webpack-dev-server config
   webpackDev: {
     port: 8080
