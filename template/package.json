@@ -5,7 +5,7 @@
   "author": "{{author}}",
   "version": "0.0.1",
   "scripts": {
-    "postinstall": "npm run init",
+    "postinstall": "npm run init postinstall",
     "init": "node tasks/init.js",
     "webpack:dev": "node tasks/webpack.js dev",
     "webpack:pack": "node tasks/webpack.js pack",
@@ -31,6 +31,7 @@
     "file-loader": "^0.11.1",
     "html-webpack-plugin": "^2.28.0",
     "log4js": "^1.1.1",
+    "node-sass": "^4.5.3",
     "sass-loader": "^6.0.3",
     "url-loader": "^0.5.8",
     "vue-loader": "^11.3.4",

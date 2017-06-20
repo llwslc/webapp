@@ -13,11 +13,11 @@ var hotEnv = 'cross-env NODE_ENV=developmentHot';
 var packEnv = 'cross-env NODE_ENV=developmentPack';
 var rlsEnv = 'cross-env NODE_ENV=production';
 
-var execAsync = function (pre, cmd, col, cb)
+var execAsync = function (mLogger, cmd, cb)
 {
   let child = exec(cmd, {encoding: 'binary'});
-  child.stdout.on('data', data => logger.info(pre, data, col));
-  child.stderr.on('data', data => logger.error(pre, data, col));
+  child.stdout.on('data', data => mLogger.info(data));
+  child.stderr.on('data', data => mLogger.error(data));
   child.on('exit', code =>
   {
     if (code != 0)

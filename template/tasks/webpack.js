@@ -26,10 +26,10 @@ var baseWebpackCfg = function (prjName, mainPath)
     resolve: {
       extensions: ['.js', '.vue'],
       alias: {
-        'vue$': 'vue/dist/vue.esm.js',
         'assets': resolve('src/assets'),
         'components': resolve('src/components'),
         'services': resolve('/src/sections'),
+        'vue$': 'vue/dist/vue.esm.js',
         'vonic': 'vonic/src/index.js',
       }
     },
@@ -62,7 +62,7 @@ var baseWebpackCfg = function (prjName, mainPath)
       },
       {
         test: /\.scss$/,
-        use: ['vue-style-loader', {loader: 'sass-loader'}]
+        use: ['vue-style-loader', {loader: 'css-loader'}, {loader: 'sass-loader'}]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -82,11 +82,9 @@ var baseWebpackCfg = function (prjName, mainPath)
       }]
     },
     plugins: [
-      new ExtractTextPlugin('styles.css'),
       new HtmlWebpackPlugin({
         filename: 'index.html',
-        template: resolve('index.html'),
-        inject: true
+        template: resolve('index.ejs'),
       }),
       new Webpack.ProvidePlugin({}),
       new Webpack.NoEmitOnErrorsPlugin()
@@ -98,6 +96,7 @@ var devHotWebpackCfg = function (prjName, mainPath)
 {
   var baseCfg = baseWebpackCfg(prjName, mainPath);
   baseCfg.devtool = '#cheap-module-eval-source-map';
+  baseCfg.plugins.push(new Webpack.HotModuleReplacementPlugin({}));
 
   return baseCfg;
 };
@@ -132,7 +131,7 @@ var startDevServer = function ()
   var server = new WebpackDevServer(compiler,
   {
     hot: true,
-    stats: verbose
+    stats: 'verbose'
   });
 
   server.listen(8080, "127.0.0.1", function ()
