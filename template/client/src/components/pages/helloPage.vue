@@ -29,5 +29,5 @@
 </script>
 
 <style lang="scss">
-  @import "./assets/style/main-style";
+  @import "../../assets/style/main-style";
 </style>

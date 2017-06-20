@@ -7,8 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackDevServer = require('webpack-dev-server');
 const util = require('./util');
 
-
-var baseWebpackCfg = function (prjName, mainPath)
+var baseWebpackCfg = function (prjName)
 {
   var resolve = function (dir)
   {
@@ -17,7 +16,7 @@ var baseWebpackCfg = function (prjName, mainPath)
 
   return {
     entry: {
-      build: resolve(mainPath)
+      build: resolve('/src/main.js')
     },
     output: {
       path: resolve('dist'),
@@ -29,8 +28,7 @@ var baseWebpackCfg = function (prjName, mainPath)
         'assets': resolve('src/assets'),
         'components': resolve('src/components'),
         'services': resolve('/src/sections'),
-        'vue$': 'vue/dist/vue.esm.js',
-        'vonic': 'vonic/src/index.js',
+        'vue$': 'vue/dist/vue.esm.js'
       }
     },
     module: {
@@ -47,13 +45,20 @@ var baseWebpackCfg = function (prjName, mainPath)
       {
         test: /\.js$/,
         loader: 'babel-loader',
+        include: [resolve('src')],
         options: {
           presets: [
-            ["env", {"modules": false}],
+            ["env",
+            {
+              "targets": {
+                "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+              },
+              "modules": false,
+            }],
             "stage-2"
           ],
-          "plugins": ["transform-runtime"],
-          "comments": false,
+          plugins: ["transform-runtime"],
+          comments: false,
         }
       },
       {
@@ -62,7 +67,10 @@ var baseWebpackCfg = function (prjName, mainPath)
       },
       {
         test: /\.scss$/,
-        use: ['vue-style-loader', {loader: 'css-loader'}, {loader: 'sass-loader'}]
+        use: ['vue-style-loader',
+          {loader: 'css-loader'},
+          {loader: 'sass-loader'}
+        ]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -84,34 +92,36 @@ var baseWebpackCfg = function (prjName, mainPath)
     plugins: [
       new HtmlWebpackPlugin({
         filename: 'index.html',
-        template: resolve('index.ejs'),
+        template: resolve('index.html'),
+        inject: true
       }),
-      new Webpack.ProvidePlugin({}),
       new Webpack.NoEmitOnErrorsPlugin()
     ],
   };
 };
 
-var devHotWebpackCfg = function (prjName, mainPath)
+var devHotWebpackCfg = function (prjName)
 {
-  var baseCfg = baseWebpackCfg(prjName, mainPath);
+  var baseCfg = baseWebpackCfg(prjName);
   baseCfg.devtool = '#cheap-module-eval-source-map';
   baseCfg.plugins.push(new Webpack.HotModuleReplacementPlugin({}));
-
+  baseCfg.plugins.push(new Webpack.DefinePlugin({
+    'process.env': '"development"'
+  }));
   return baseCfg;
 };
 
-var devPackWebpackCfg = function (prjName, mainPath)
+var devPackWebpackCfg = function (prjName)
 {
-  var baseCfg = baseWebpackCfg(prjName, mainPath);
+  var baseCfg = baseWebpackCfg(prjName);
   baseCfg.devtool = '#source-map';
 
   return baseCfg;
 };
 
-var prodWebpackCfg = function (prjName, mainPath)
+var prodWebpackCfg = function (prjName)
 {
-  var baseCfg = baseWebpackCfg(prjName, mainPath);
+  var baseCfg = baseWebpackCfg(prjName);
   baseCfg.plugins.push(
     new webpack.LoaderOptionsPlugin({
       minimize: true
@@ -121,37 +131,83 @@ var prodWebpackCfg = function (prjName, mainPath)
   return baseCfg;
 };
 
-var startDevServer = function ()
+var startDevServer = function (prjName)
 {
-  util.serverLog.info(`Starting...`);
+  util.webpackLog.info(`Starting...`);
 
-  var webpackConfig = devHotWebpackCfg('client', '/src/main.js');
+  var webpackConfig = devHotWebpackCfg(prjName);
 
   var compiler = Webpack(webpackConfig);
   var server = new WebpackDevServer(compiler,
   {
     hot: true,
-    stats: 'verbose'
+    stats: {
+      colors: true
+    }
   });
 
-  server.listen(8080, "127.0.0.1", function ()
+  server.listen(config.webpackDev.webpackDev, function ()
   {
-    console.log("Starting server on http://localhost:8080");
+    util.webpackLog.info(`Starting server on http://localhost:${config.webpackDev.webpackDev}`);
   });
 };
 
+var startPackServer = function (prjName)
+{
+  util.webpackLog.info(`Starting...`);
+
+  var webpackConfig = devPackWebpackCfg(prjName);
+
+  Webpack(webpackConfig, function (err, stats)
+  {
+    if (err)
+    {
+      util.webpackLog.error(err.message)
+    }
+    else
+    {
+      util.webpackLog.info('Build complete.\n')
+    }
+  })
+};
+
+var webpackBuild = function (prjName)
+{
+  util.webpackLog.info(`Starting...`);
+
+  var webpackConfig = prodWebpackCfg(prjName);
+
+  Webpack(webpackConfig, function (err, stats)
+  {
+    if (err)
+    {
+      util.webpackLog.error(err.message)
+    }
+    else
+    {
+      util.webpackLog.info('Build complete.\n')
+    }
+  })
+};
+
+
+var webpackDir = config.webpackDir[0];
+if (!!process.argv[3])
+{
+  webpackDir = process.argv[3];
+}
 
 if (process.argv[2] == 'dev')
 {
-  startDevServer();
+  startDevServer(webpackDir);
 }
 else if (process.argv[2] == 'pack')
 {
-  startWebServer();
+  startPackServer(webpackDir);
 }
 else if (process.argv[2] == 'build')
 {
-  startWebServer();
+  webpackBuild(webpackDir);
 }
 else
 {
