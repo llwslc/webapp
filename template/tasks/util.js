@@ -38,6 +38,7 @@ module.exports = {
   logger,
   execAsync,
   npmLog,
+  webpackLog,
   mongoLog,
   serverLog,
   hotEnv,

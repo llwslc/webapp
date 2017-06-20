@@ -20,7 +20,7 @@ var initCfg = function (dir)
 
 initCfg(`.`);
 const config = require('../config');
-var allPackage = config.allPackage;
+var allPackage = config.webpackDir.concat(config.serverDir);
 
 var initAllPackage = function ()
 {

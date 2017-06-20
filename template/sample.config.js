@@ -1,17 +1,15 @@
 
 var config = {
 
-  // all package
-  allPackage: ['client', 'server'],
+  // webpack dir
+  webpackDir: ['client'],
+
+  // server package
+  serverDir: ['server'],
 
   // webpack-dev-server config
   webpackDev: {
     port: 8080
-  },
-
-  // webpack config
-  webpackPath: {
-    path: ''
   },
 
   // express config

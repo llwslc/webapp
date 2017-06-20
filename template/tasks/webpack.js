@@ -146,9 +146,9 @@ var startDevServer = function (prjName)
     }
   });
 
-  server.listen(config.webpackDev.webpackDev, function ()
+  server.listen(config.webpackDev.port, function ()
   {
-    util.webpackLog.info(`Starting server on http://localhost:${config.webpackDev.webpackDev}`);
+    util.webpackLog.info(`Starting server on http://localhost:${config.webpackDev.port}`);
   });
 };
 

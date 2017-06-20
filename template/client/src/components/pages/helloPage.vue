@@ -1,12 +1,11 @@
 <template>
   <div>
-    <span>{{ hello }}</span>
+    <span>\{{ hello }}</span>
   </div>
 </template>
 
 <script>
   export default {
-    mixins: [Locale],
 
     computed: {
     },
