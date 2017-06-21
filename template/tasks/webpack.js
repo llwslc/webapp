@@ -38,7 +38,10 @@ var baseWebpackCfg = function (prjName)
         loader: 'vue-loader',
         options: {
           loaders: {
-            'scss': 'vue-style-loader!css-loader!sass-loader'
+            'scss': ['vue-style-loader',
+              {loader: 'css-loader'},
+              {loader: 'sass-loader'}
+            ]
           }
         }
       },
