@@ -31,6 +31,7 @@ module.exports = {
     'server/sqlite/*': `dbCfg !== 'mongoose'`,
     'server/mongoose/*': `dbCfg !== 'sqlite'`,
     'server/+(mongoose|sqlite)/*': `dbCfg !== 'none'`,
+    'tasks/mongo.js': `dbCfg !== 'mongoose'`,
   },
   complete: (data) =>
   {

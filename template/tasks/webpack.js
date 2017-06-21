@@ -20,7 +20,7 @@ var baseWebpackCfg = function (prjName)
     },
     output: {
       path: resolve('dist'),
-      filename: '[name].js'
+      filename: 'js/[name].js'
     },
     resolve: {
       extensions: ['.js', '.vue'],
@@ -36,14 +36,7 @@ var baseWebpackCfg = function (prjName)
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: {
-          loaders: {
-            'scss': ['vue-style-loader',
-              {loader: 'css-loader'},
-              {loader: 'sass-loader'}
-            ]
-          }
-        }
+        options: {extractCSS: true}
       },
       {
         test: /\.js$/,
@@ -66,14 +59,17 @@ var baseWebpackCfg = function (prjName)
       },
       {
         test: /\.css$/,
-        use: ['vue-style-loader', {loader: 'css-loader'}]
+        use: ExtractTextPlugin.extract({
+          use: ['css-loader'],
+          fallback: 'vue-style-loader'
+        })
       },
       {
         test: /\.scss$/,
-        use: ['vue-style-loader',
-          {loader: 'css-loader'},
-          {loader: 'sass-loader'}
-        ]
+        use: ExtractTextPlugin.extract({
+          use: ['css-loader', 'sass-loader'],
+          fallback: 'vue-style-loader'
+        })
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -93,6 +89,9 @@ var baseWebpackCfg = function (prjName)
       }]
     },
     plugins: [
+      new ExtractTextPlugin({
+        filename: 'css/[name].[contenthash].css'
+      }),
       new HtmlWebpackPlugin({
         filename: 'index.html',
         template: resolve('index.html'),

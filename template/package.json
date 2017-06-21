@@ -5,18 +5,16 @@
   "author": "{{author}}",
   "version": "0.0.1",
   "scripts": {
-    "postinstall": "npm run init postinstall",
     "init": "node tasks/init.js",
     "webpack:dev": "node tasks/webpack.js dev",
     "webpack:pack": "node tasks/webpack.js pack",
     "webpack:build": "node tasks/webpack.js build",
     "server": "node tasks/server.js server",
+{{#if_eq dbCfg "mongoose"}}
     "mongo:open": "node tasks/mongo.js mongo:open",
     "mongo:close": "node tasks/mongo.js mongo:close",
-    "client:dev": "cd client && node build/dev-server.js",
-    "client:build": "cd client && node build/build.js",
-    "admin:dev": "cd admin && node build/dev-server.js",
-    "admin:build": "cd admin && node build/build.js"
+{{/if_eq}}
+    "postinstall": "npm run init postinstall"
   },
   "devDependencies": {
     "async": "^2.4.1",
