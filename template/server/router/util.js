@@ -17,7 +17,7 @@ var setJwtCookie = function (self, res)
 {
   let payload = {
     accId: res[0]._id,
-    exp: config.jwt.exp,
+    exp: Math.floor(Date.now() / 1000) + config.jwt.exp,
   };
   let token = jwt.sign(payload, config.jwt.secret);
   self.response.cookie(config.jwt.cookieKey, token, {httpOnly: true});

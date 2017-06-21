@@ -21,8 +21,8 @@ var config = {
   jwt: {
     secret: 'xxx',
     userProperty: 'jwtData',
-    exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 6),
-    iat: Math.floor(Date.now() / 1000),
+    exp: 60 * 60 * 24 * 6,
+    iat: 0,
     cookieKey: 'X-Token',
     refreshTime: 60 * 60 * 24,
   },

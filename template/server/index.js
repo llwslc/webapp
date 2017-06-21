@@ -55,8 +55,8 @@ app.use(function (req, res, next)
     let nowTime = Date.now() / 1000;
     if ((tokenTime - nowTime) < config.jwt.refreshTime)
     {
-      tokenObj.exp = config.jwt.exp;
-      tokenObj.iat = config.jwt.iat;
+      tokenObj.exp = Math.floor(Date.now() / 1000) + config.jwt.exp;
+      tokenObj.iat = Math.floor(Date.now() / 1000);
       let token = jwt.sign(tokenObj, config.jwt.secret);
       res.cookie(config.jwt.cookieKey, token, {httpOnly: true});
     }
