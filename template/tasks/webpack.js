@@ -126,7 +126,7 @@ var prodWebpackCfg = function (prjName)
 {
   var baseCfg = baseWebpackCfg(prjName);
   baseCfg.plugins.push(
-    new webpack.LoaderOptionsPlugin({
+    new Webpack.LoaderOptionsPlugin({
       minimize: true
     })
   );
