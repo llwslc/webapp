@@ -48,11 +48,11 @@ module.exports = {
 
     console.log(`---
 
-  All set. More configurations can be made at \x1b[33m{{destDirName}}/config.js\x1b[0m.
+  All set. More configurations can be made at \x1b[33m${data.destDirName}/config.js\x1b[0m.
 
   Next steps:
     1.
-       \x1B[32mcd {{destDirName}}\x1b[0m
+       \x1B[32mcd ${data.destDirName}\x1b[0m
     2.
        \x1B[32mnpm i\x1b[0m
     3.
