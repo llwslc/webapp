@@ -6,7 +6,7 @@ var mongodbDao = function ()
 {
   let self = this;
 
-  self.dbUri = `mongodb://${config.mongodb.host}:${config.mongodb.port}/${config.mongodb.db}`;
+  self.dbUri = `mongodb://${config.mongodb.bindIp}:${config.mongodb.port}/${config.mongodb.db}`;
   self.dbConn = mongoose.connect(self.dbUri, function (err)
   {
     if (err)

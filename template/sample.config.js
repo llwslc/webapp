@@ -27,19 +27,23 @@ var config = {
     refreshTime: 60 * 60 * 24,
   },
 
+{{#if_eq dbCfg "mongoose"}}
   // mongodb config
   mongodb: {
-    host: 'localhost',
+    bindIp: 'localhost',
     port: 28073,
     db: '{{name}}',
     path: './db',
     log: 'db.log',
   },
+{{/if_eq}}
 
+{{#if_eq dbCfg "sqlite"}}
   // sqlite config
   sqlite: {
     path: '{{name}}.db'
   }
+{{/if_eq}}
 };
 
 
