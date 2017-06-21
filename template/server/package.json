@@ -11,7 +11,10 @@
     "express": "^4.15.2",
     "express-jwt": "^5.3.0",
 {{#if_eq dbCfg "mongoose"}}
-    "mongoose": "^4.9.6"
+    "mongoose": "^4.9.6",
 {{/if_eq}}
-  }
+    "async": "^2.3.0"
+  },
+  "repository": "npm/npm",
+  "license": "UNLICENSED"
 }

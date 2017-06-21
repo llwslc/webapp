@@ -10,5 +10,7 @@
     "vue": "^2.3.2",
     "vue-router": "^2.5.3",
     "vuex": "^2.3.1"
-  }
+  },
+  "repository": "npm/npm",
+  "license": "UNLICENSED"
 }
