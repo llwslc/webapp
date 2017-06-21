@@ -87,6 +87,11 @@ app.post('/delToken', function (req, res)
   res.end();
 });
 
+app.post('/checkToken', function (req, res)
+{
+  res.end();
+});
+
 app.post('/', function (req, res)
 {
   res.send('POST request to homepage');
