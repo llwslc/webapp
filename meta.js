@@ -32,20 +32,26 @@ module.exports = {
     'server/mongoose/*': `dbCfg !== 'sqlite'`,
     'server/+(mongoose|sqlite)/*': `dbCfg !== 'none'`,
     'tasks/mongo.js': `dbCfg !== 'mongoose'`,
+    'server/router/sqliteAccount.js': `dbCfg !== 'mongoose'`,
+    'server/router/mongooseAccount.js': `dbCfg !== 'sqlite'`,
   },
   complete: (data) =>
   {
-    var oldPath = `${data.destDirName}/server/${data.dbCfg}`;
-    var newPath = `${data.destDirName}/server/db`;
-    if (fs.existsSync(newPath))
+    var renameFunc = function (oldPath, newPath)
     {
-      console.error(`${oldPath} cant rename ${newPath}!`);
-      console.error(`Because ${newPath} is existed.`);
+      if (fs.existsSync(newPath))
+      {
+        console.error(`${oldPath} cant rename ${newPath}!`);
+        console.error(`Because ${newPath} is existed.`);
+      }
+      else
+      {
+        fs.renameSync(oldPath, newPath);
+      }
     }
-    else
-    {
-      fs.renameSync(oldPath, newPath);
-    }
+
+    renameFunc(`${data.destDirName}/server/${data.dbCfg}`, `${data.destDirName}/server/db`);
+    renameFunc(`${data.destDirName}/server/router/${data.dbCfg}Account.js`, `${data.destDirName}/server/router/account.js`);
 
     console.log(`---
 

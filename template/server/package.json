@@ -13,6 +13,9 @@
 {{#if_eq dbCfg "mongoose"}}
     "mongoose": "^4.9.6",
 {{/if_eq}}
+{{#if_eq dbCfg "sqlite"}}
+    "better-sqlite3": "^3.1.0",
+{{/if_eq}}
     "async": "^2.3.0"
   },
   "repository": "npm/npm",

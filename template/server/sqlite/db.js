@@ -1,31 +1,30 @@
 
 const config = require('../../config');
-const mongoose = require('mongoose');
+const sqlite = require('better-sqlite3');
 
-var mongodbDao = function ()
+var sqliteDao = function ()
 {
   let self = this;
 
-  self.dbUri = `mongodb://${config.mongodb.host}:${config.mongodb.port}/${config.mongodb.db}`;
-  self.dbConn = mongoose.connect(self.dbUri, function (err)
-  {
-    if (err)
-    {
-      console.error(err.message);
-    }
-    else
-    {
-      console.log('Mongodb opend..');
+  let db = new sqlite(config.sqlite.path);
 
-      self.account = require('./account');
-    }
-  });
-
-  self.close = function ()
+  self.db = db;
+  var stmt = db.prepare(`SELECT name FROM sqlite_master WHERE type='table' AND name='account'`);
+  var tables = stmt.all();
+  if (tables.length == 0)
   {
-    mongoose.disconnect();
-  };
+    stmt = db.prepare(`CREATE TABLE 'account' (
+    '_id' INTEGER NOT NULL PRIMARY KEY,
+    'acc' INTEGER NOT NULL UNIQUE,
+    'pwd' TEXT NOT NULL
+    )`);
+    stmt.run();
+  }
+
+  self.account = require('./account')(db);
+
+  console.log('Sqlite opend..');
 };
 
 
-module.exports = mongodbDao;
+module.exports = sqliteDao;

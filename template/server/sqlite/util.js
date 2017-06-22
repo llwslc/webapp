@@ -1,47 +1,36 @@
 
-var findCallback = function (err, res, cb)
+var dbRun = function (db, sql)
 {
-  // for find findById findOne
-  if (err)
-  {
-    console.error(err.message);
-    cb([]);
-  }
-  else
-  {
-    if (res instanceof Array)
-    {
-      // find RES is array
-      cb(res);
-    }
-    else
-    {
-      // findById findOne findByIdAndUpdate findOneAndUpdate RES is obj or null
-      if (res === null)
-      {
-        cb([]);
-      }
-      else
-      {
-        cb([res]);
-      }
-    }
-  }
-};
+  let stmt = {};
+  let res = [];
 
-var createCallback = function (err, res, cb)
-{
-  // for create
-  if (err)
+  try
   {
-    console.error(err.message);
-    cb([]);
+    stmt = db.prepare(sql);
+
+    if (/^SELECT/i.test(sql))
+    {
+      res = stmt.all();
+    }
+    else if (/^(UPDATE|DELETE)/i.test(sql))
+    {
+      if (stmt.run().changes > 0)
+      {
+        res = [{}];
+      }
+    }
+    else if (/^INSERT/i.test(sql))
+    {
+      res.push({_id: stmt.run().lastInsertROWID})
+    }
   }
-  else
+  catch (err)
   {
-    cb([{_id: res._id}]);
+    console.log(err.message)
   }
+
+  return res;
 };
 
 
-module.exports = {findCallback, createCallback};
+module.exports = {dbRun};

@@ -37,7 +37,6 @@ var config = {
     log: 'db.log',
   },
 {{/if_eq}}
-
 {{#if_eq dbCfg "sqlite"}}
   // sqlite config
   sqlite: {

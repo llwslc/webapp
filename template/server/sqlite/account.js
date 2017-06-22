@@ -1,54 +1,43 @@
 
-const mongoose = require('mongoose');
 const util = require('./util');
 
-var accountSchema = new mongoose.Schema({
-  acc: String,  // 用户名
-  pwd: String,  // 密码
-});
-
-accountSchema.statics.login = function (acc, pwd, cb)
+var accountTable = function (db)
 {
   let self = this;
-  let doc = {acc: acc, pwd: pwd};
-  let opt = {_id: true};
 
-  self.find(doc, opt, (err, res) => util.findCallback.call(self, err, res, cb));
-};
+  self.tableName = 'account';
 
+  self.login = function (acc, pwd)
+  {
 
-accountSchema.statics.findStu = function (acc, cb)
-{
-  let self = this;
-  let doc = {acc: acc};
-  let opt = {_id: true};
+    let sql = `SELECT _id FROM '${self.tableName}' WHERE acc = '${acc}' AND pwd = '${pwd}'`;
+    return util.dbRun(db, sql);
+  };
 
-  self.find(doc, opt, (err, res) => util.findCallback.call(self, err, res, cb));
-};
+  self.findAcc = function (acc)
+  {
+    let sql = `SELECT * FROM '${self.tableName}' WHERE acc = '${acc}'`;
+    return util.dbRun(db, sql);
+  };
 
-accountSchema.statics.register = function (acc, pwd, cb)
-{
-  let self = this;
-  let doc = {acc: acc, pwd: pwd};
+  self.register = function (acc, pwd)
+  {
+    let sql = `INSERT INTO '${self.tableName}' (acc, pwd) VALUES ('${acc}', '${pwd}')`;
+    return util.dbRun(db, sql);
+  };
 
-  self.create(doc, (err, res) => util.createCallback.call(self, err, res, cb));
-};
+  self.loginById = function (id, pwd)
+  {
+    let sql = `SELECT * FROM '${self.tableName}' WHERE _id = '${id}' AND pwd = '${pwd}'`;
+    return util.dbRun(db, sql);
+  };
 
-accountSchema.statics.loginById = function (id, pwd, cb)
-{
-  let self = this;
-  let doc = {_id: id, pwd: pwd};
-
-  self.findOne(doc, (err, res) => util.findCallback.call(self, err, res, cb));
-};
-
-accountSchema.statics.pwdModify = function (id, pwd, cb)
-{
-  let self = this;
-  let doc = {pwd: pwd};
-
-  self.findByIdAndUpdate(id, doc, (err, res) => util.findCallback.call(self, err, res, cb));
-};
+  self.pwdModify = function (id, pwd)
+  {
+    let sql = `UPDATE '${self.tableName}' SET pwd = '${pwd}' WHERE _id = '${id}'`;
+    return util.dbRun(db, sql);
+  };
+}
 
 
-module.exports = mongoose.model('account', accountSchema, 'account');
+module.exports = (db) => new accountTable(db);
