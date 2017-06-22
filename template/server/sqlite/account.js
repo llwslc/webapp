@@ -9,7 +9,6 @@ var accountTable = function (db)
 
   self.login = function (acc, pwd)
   {
-
     let sql = `SELECT _id FROM '${self.tableName}' WHERE acc = '${acc}' AND pwd = '${pwd}'`;
     return util.dbRun(db, sql);
   };
