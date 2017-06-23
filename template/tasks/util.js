@@ -10,10 +10,6 @@ var webpackLog = log4js.getLogger('webpack');
 var mongoLog = log4js.getLogger('mongo');
 var serverLog = log4js.getLogger('server');
 
-var hotEnv = 'cross-env NODE_ENV=developmentHot';
-var packEnv = 'cross-env NODE_ENV=developmentPack';
-var rlsEnv = 'cross-env NODE_ENV=production';
-
 var execAsync = function (mLogger, cmd, cb)
 {
   let child = exec(cmd, {encoding: 'binary'});
@@ -40,8 +36,5 @@ module.exports = {
   npmLog,
   webpackLog,
   mongoLog,
-  serverLog,
-  hotEnv,
-  packEnv,
-  rlsEnv
+  serverLog
 };
