@@ -17,19 +17,64 @@ var resolve = function (dir)
 
 var specialWebpack = function (cfg, cb)
 {
-  // example for vonic
-  return Webpack(cfg, cb);
+  return Webpack(cfg, function (err, stats)
+  {
+    var hasErrs = false;
+    if (err)
+    {
+      hasErrs = true;
+      util.webpackLog.error(err.stack || err);
+      if (err.details)
+      {
+        util.webpackLog.error(err.details);
+      }
+    }
+    else
+    {
+      if (stats.hasErrors())
+      {
+        hasErrs = true;
+        util.webpackLog.error(stats.compilation.errors);
+      }
+
+      if (stats.hasWarnings())
+      {
+        util.webpackLog.warn(stats.compilation.warnings)
+      }
+    }
+
+    cb(hasErrs);
+  });
 };
 
 var baseWebpackCfg = function ()
 {
+  var useBabelLoader = [
+  {
+    loader: 'babel-loader',
+    options: {
+      presets: [
+        ["env",
+        {
+          "targets": {
+            "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+          },
+          "modules": false,
+        }],
+        "stage-2"
+      ],
+      plugins: ["transform-runtime"],
+      comments: false,
+    }
+  }];
+
   return {
     entry: {
       build: resolve('/src/main.js')
     },
     output: {
       path: resolve('dist'),
-      filename: 'js/[name].js'
+      filename: 'js/[name].[hash:7].js'
     },
     resolve: {
       extensions: ['.js', '.vue'],
@@ -45,26 +90,15 @@ var baseWebpackCfg = function ()
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: {extractCSS: true}
+        options: {
+          extractCSS: true,
+          loaders: {js: useBabelLoader}
+        }
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader',
         include: [resolve('src')],
-        options: {
-          presets: [
-            ["env",
-            {
-              "targets": {
-                "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
-              },
-              "modules": false,
-            }],
-            "stage-2"
-          ],
-          plugins: ["transform-runtime"],
-          comments: false,
-        }
+        use: useBabelLoader
       },
       {
         test: /\.css$/,
@@ -142,6 +176,7 @@ var devPackWebpackCfg = function ()
 
 var prodWebpackCfg = function ()
 {
+  var baseCfg = baseWebpackCfg();
   baseCfg.plugins.push(
     new Webpack.LoaderOptionsPlugin({
       minimize: true
@@ -184,9 +219,12 @@ var startDevServer = function ()
 
   var webpackConfig = devHotWebpackCfg();
 
-  var compiler = specialWebpack(webpackConfig, function ()
+  var compiler = specialWebpack(webpackConfig, function (hasErrs)
   {
-    opn(`http://localhost:${config.webpackDev.port}`);
+    if (!hasErrs)
+    {
+      opn(`http://localhost:${config.webpackDev.port}`);
+    }
   });
 
   var server = new WebpackDevServer(compiler,
@@ -213,16 +251,9 @@ var startPackServer = function ()
 
   var webpackConfig = devPackWebpackCfg();
 
-  specialWebpack(webpackConfig, function (err, stats)
+  specialWebpack(webpackConfig, function ()
   {
-    if (err)
-    {
-      util.webpackLog.error(err.message)
-    }
-    else
-    {
-      util.webpackLog.info('Build complete.\n')
-    }
+    util.webpackLog.info('Build complete.\n')
   })
 };
 
@@ -232,16 +263,9 @@ var webpackBuild = function ()
 
   var webpackConfig = prodWebpackCfg();
 
-  specialWebpack(webpackConfig, function (err, stats)
+  specialWebpack(webpackConfig, function ()
   {
-    if (err)
-    {
-      util.webpackLog.error(err.message)
-    }
-    else
-    {
-      util.webpackLog.info('Build complete.\n')
-    }
+    util.webpackLog.info('Build complete.\n')
   })
 };
 
