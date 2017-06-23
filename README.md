@@ -37,6 +37,9 @@ vue init llwslc/webapp my-project
 cd my-project
 npm i
 
-# run your app
+# run your client
 npm run dev
+
+# run your server
+npm run start
 ```
