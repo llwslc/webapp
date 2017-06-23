@@ -9,7 +9,12 @@ var config = {
 
   // webpack-dev-server config
   webpackDev: {
-    port: 8080
+    port: 8080,
+    proxy: {
+      "/files": {
+        target: "http://localhost:3000"
+      }
+    }
   },
 
   // express config

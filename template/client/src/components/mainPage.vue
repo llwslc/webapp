@@ -21,7 +21,7 @@
 
     beforeCreate() {
 
-      global.Hello = require('../sections/helloJs');
+      global.Hello = require('../services/helloJs');
 
       global.Vue = Vue;
       global.Store = Store;
