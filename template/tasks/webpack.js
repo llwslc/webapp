@@ -263,10 +263,13 @@ var webpackBuild = function ()
 
   var webpackConfig = prodWebpackCfg();
 
-  specialWebpack(webpackConfig, function ()
+  util.delDirAsync(util.webpackLog, resolve('dist'), function ()
   {
-    util.webpackLog.info('Build complete.\n')
-  })
+    specialWebpack(webpackConfig, function ()
+    {
+      util.webpackLog.info('Build complete.\n')
+    });
+  });
 };
 
 
