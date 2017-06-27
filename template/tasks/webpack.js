@@ -39,7 +39,7 @@ var specialWebpack = function (cfg, cb)
 
       if (stats.hasWarnings())
       {
-        util.webpackLog.warn(stats.compilation.warnings)
+        util.webpackLog.warn(stats.compilation.warnings);
       }
     }
 
@@ -70,18 +70,20 @@ var baseWebpackCfg = function ()
 
   return {
     entry: {
-      build: resolve('/src/main.js')
+      build: resolve('src/main.js')
     },
     output: {
       path: resolve('dist'),
-      filename: 'js/[name].[hash:7].js'
+      filename: 'assets/js/[name].[hash:7].js',
+      // 规定网站根目录位置，让css中引用的图片路径正确
+      publicPath: '/'
     },
     resolve: {
       extensions: ['.js', '.vue'],
       alias: {
         'assets': resolve('src/assets'),
         'components': resolve('src/components'),
-        'services': resolve('/src/sections'),
+        'services': resolve('src/sections'),
         'vue$': 'vue/dist/vue.esm.js'
       }
     },
@@ -119,7 +121,7 @@ var baseWebpackCfg = function ()
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: 'imgs/[name].[hash:7].[ext]'
+          name: 'assets/imgs/[name].[hash:7].[ext]'
         }
       },
       {
@@ -127,13 +129,13 @@ var baseWebpackCfg = function ()
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: 'fonts/[name].[hash:7].[ext]'
+          name: 'assets/fonts/[name].[hash:7].[ext]'
         }
       }]
     },
     plugins: [
       new ExtractTextPlugin({
-        filename: 'css/[name].[contenthash].css'
+        filename: 'assets/css/[name].[contenthash].css'
       }),
       new HtmlWebpackPlugin({
         filename: 'index.html',
@@ -253,8 +255,8 @@ var startPackServer = function ()
 
   specialWebpack(webpackConfig, function ()
   {
-    util.webpackLog.info('Build complete.\n')
-  })
+    util.webpackLog.info('Build complete.\n');
+  });
 };
 
 var webpackBuild = function ()
@@ -267,7 +269,7 @@ var webpackBuild = function ()
   {
     specialWebpack(webpackConfig, function ()
     {
-      util.webpackLog.info('Build complete.\n')
+      util.webpackLog.info('Build complete.\n');
     });
   });
 };

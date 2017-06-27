@@ -15,6 +15,7 @@ const jwtUnless = {
     '/',
     '/getToken',
     '/delToken',
+    {url: /^\/assets*/},
     '/account/login',
     '/account/register',
     {url: /(.*)/, methods: ['OPTIONS']}
