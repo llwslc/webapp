@@ -92,7 +92,7 @@ var baseWebpackCfg = function ()
       alias: {
         'assets': resolve('src/assets'),
         'components': resolve('src/components'),
-        'services': resolve('src/sections'),
+        'services': resolve('src/services'),
         'vue$': 'vue/dist/vue.esm.js'
       }
     },
