@@ -68,6 +68,15 @@ var baseWebpackCfg = function ()
     }
   }];
 
+  var postcssLoader = {
+    loader: 'postcss-loader',
+    options: {
+      plugins: [
+        require('autoprefixer')
+      ]
+    }
+  };
+
   return {
     entry: {
       build: resolve('src/main.js')
@@ -94,7 +103,10 @@ var baseWebpackCfg = function ()
         loader: 'vue-loader',
         options: {
           extractCSS: true,
-          loaders: {js: useBabelLoader}
+          loaders: {js: useBabelLoader},
+          postcss: [
+            require('autoprefixer')()
+          ]
         }
       },
       {
@@ -105,14 +117,14 @@ var baseWebpackCfg = function ()
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
-          use: ['css-loader'],
+          use: ['css-loader', postcssLoader],
           fallback: 'vue-style-loader'
         })
       },
       {
         test: /\.scss$/,
         use: ExtractTextPlugin.extract({
-          use: ['css-loader', 'sass-loader'],
+          use: ['css-loader', 'sass-loader', postcssLoader],
           fallback: 'vue-style-loader'
         })
       },
