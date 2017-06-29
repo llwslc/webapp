@@ -7,6 +7,7 @@ const platform = require('os').platform();
 
 exports.logger = log4js.getLogger();
 exports.npmLog = log4js.getLogger('npm');
+exports.pm2Log = log4js.getLogger('pm2');
 exports.webpackLog = log4js.getLogger('webpack');
 exports.mongoLog = log4js.getLogger('mongo');
 exports.serverLog = log4js.getLogger('server');
