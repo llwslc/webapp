@@ -5,6 +5,7 @@
   "author": "{{author}}",
   "version": "0.0.1",
   "scripts": {
+    "postinstall": "npm run init postinstall",
     "init": "node tasks/init.js",
     "dev": "node tasks/webpack.js dev",
     "pack": "node tasks/webpack.js pack",
@@ -14,7 +15,7 @@
     "mongo:open": "node tasks/mongo.js mongo:open",
     "mongo:close": "node tasks/mongo.js mongo:close",
 {{/if_eq}}
-    "postinstall": "npm run init postinstall"
+    "pm2": "node tasks/pm2.js"
   },
   "devDependencies": {
     "async": "^2.4.1",
