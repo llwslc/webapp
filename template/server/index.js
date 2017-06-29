@@ -16,8 +16,8 @@ const jwtUnless = {
     '/getToken',
     '/delToken',
     {url: /^\/assets*/},
-    '/account/login',
-    '/account/register',
+    '/api/account/login',
+    '/api/account/register',
     {url: /(.*)/, methods: ['OPTIONS']}
   ]
 };
@@ -97,7 +97,7 @@ app.post('/', function (req, res)
   res.send('POST request to homepage');
 });
 
-app.post('/account/:method', accountRouter);
+app.post('/api/account/:method', accountRouter);
 
 app.listen(serverPort, function ()
 {

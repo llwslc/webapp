@@ -11,8 +11,8 @@ var config = {
   webpackDev: {
     port: 8080,
     proxy: {
-      "/files": {
-        target: "http://localhost:3000"
+      '/api': {
+        target: 'http://localhost:3000'
       }
     }
   },
