@@ -34,12 +34,12 @@ var specialWebpack = function (cfg, cb)
       if (stats.hasErrors())
       {
         hasErrs = true;
-        util.webpackLog.error(stats.compilation.errors);
+        stats.compilation.errors.forEach(function (err) {util.webpackLog.error(err)});
       }
 
       if (stats.hasWarnings())
       {
-        util.webpackLog.warn(stats.compilation.warnings);
+        stats.compilation.warnings.forEach(function (err) {util.webpackLog.warn(err)});
       }
     }
 
