@@ -1,5 +1,6 @@
 
 const log4js = require('log4js');
+const iconv = require('iconv-lite');
 const exec = require('child_process').exec;
 const fs = require('fs');
 const path = require('path');
@@ -12,11 +13,21 @@ exports.webpackLog = log4js.getLogger('webpack');
 exports.mongoLog = log4js.getLogger('mongo');
 exports.serverLog = log4js.getLogger('server');
 
+exports.decodeBuffer = function (data)
+{
+  let Encoding = 'utf8';
+  if (platform === 'win32')
+  {
+    Encoding = 'GBK';
+  }
+  return iconv.decode(Buffer(data, 'binary'), Encoding);
+};
+
 exports.execAsync = function (mLogger, cmd, cb)
 {
   let child = exec(cmd, {encoding: 'binary'});
-  child.stdout.on('data', data => mLogger.info(data));
-  child.stderr.on('data', data => mLogger.error(data));
+  child.stdout.on('data', data => mLogger.info(exports.decodeBuffer(data)));
+  child.stderr.on('data', data => mLogger.error(exports.decodeBuffer(data)));
   child.on('exit', code =>
   {
     if (code != 0)
@@ -65,4 +76,4 @@ exports.delDirAsync = function (mLogger, mPath, cb)
       cb();
     }
   });
-}
+};
