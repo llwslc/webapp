@@ -17,7 +17,7 @@ accountSchema.statics.login = function (acc, pwd, cb)
 };
 
 
-accountSchema.statics.findStu = function (acc, cb)
+accountSchema.statics.findAcc = function (acc, cb)
 {
   let self = this;
   let doc = {acc: acc};

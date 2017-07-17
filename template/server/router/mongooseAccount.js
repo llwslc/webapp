@@ -43,7 +43,7 @@ var accountRouter = function (request, response)
       },
       function (res, cb)
       {
-        db.account.findStu(acc, function (res)
+        db.account.findAcc(acc, function (res)
         {
           if (res.length == 0)
           {
