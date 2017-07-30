@@ -50,8 +50,11 @@ module.exports = {
       }
     }
 
-    renameFunc(`${data.destDirName}/server/${data.dbCfg}`, `${data.destDirName}/server/db`);
-    renameFunc(`${data.destDirName}/server/router/${data.dbCfg}Account.js`, `${data.destDirName}/server/router/account.js`);
+    if (data.dbCfg !== 'none')
+    {
+      renameFunc(`${data.destDirName}/server/${data.dbCfg}`, `${data.destDirName}/server/db`);
+      renameFunc(`${data.destDirName}/server/router/${data.dbCfg}Account.js`, `${data.destDirName}/server/router/account.js`);
+    }
 
     console.log(`---
 
