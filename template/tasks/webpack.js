@@ -35,12 +35,12 @@ var specialWebpack = function (cfg, build)
       {
         if (stats.hasErrors())
         {
-          stats.compilation.errors.forEach(function (err) {util.webpackLog.error(err)});
+          stats.compilation.errors.forEach(function (err) {util.webpackLog.error(err);});
         }
 
         if (stats.hasWarnings())
         {
-          stats.compilation.warnings.forEach(function (err) {util.webpackLog.warn(err)});
+          stats.compilation.warnings.forEach(function (err) {util.webpackLog.warn(err);});
         }
       }
     });
