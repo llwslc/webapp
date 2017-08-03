@@ -16,4 +16,4 @@ var errMsg = {
 };
 
 
-module.exports = errMsg
+module.exports = errMsg;

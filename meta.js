@@ -67,6 +67,6 @@ module.exports = {
        \x1B[32mnpm i\x1b[0m
     3.
        \x1B[32mnpm run dev\x1b[0m for client
-       \x1B[32mnpm run start\x1b[0m for server`)
+       \x1B[32mnpm run start\x1b[0m for server`);
   },
-}
+};

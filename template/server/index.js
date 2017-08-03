@@ -1,7 +1,7 @@
 
 const config = require('../config');
 const express = require('express');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const expJwt = require('express-jwt');
 const jwt = require('jsonwebtoken');
@@ -38,7 +38,7 @@ app.use(expJwt({
   userProperty: config.jwt.userProperty,
   getToken: function (req)
   {
-    return req.cookies[config.jwt.cookieKey]
+    return req.cookies[config.jwt.cookieKey];
   },
 }).unless(jwtUnless));
 app.use(function (err, req, res, next)

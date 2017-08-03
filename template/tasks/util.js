@@ -43,7 +43,7 @@ exports.execAsync = function (mLogger, cmd, cb)
 
 exports.delDirAsync = function (mLogger, mPath, cb)
 {
-  mPath = path.resolve(__dirname, mPath)
+  mPath = path.resolve(__dirname, mPath);
   if (fs.existsSync(mPath))
   {
     if (!fs.statSync(mPath).isDirectory())

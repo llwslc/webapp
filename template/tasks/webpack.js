@@ -12,7 +12,7 @@ const util = require('./util');
 
 var resolve = function (dir)
 {
-  return path.join(__dirname, '..', webpackDir, dir)
+  return path.join(__dirname, '..', webpackDir, dir);
 };
 
 var specialWebpack = function (cfg, cb)
@@ -54,16 +54,16 @@ var baseWebpackCfg = function ()
     loader: 'babel-loader',
     options: {
       presets: [
-        ["env",
+        ['env',
         {
-          "targets": {
-            "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+          targets: {
+            browsers: ['> 1%', 'last 2 versions', 'not ie <= 8']
           },
-          "modules": false,
+          modules: false,
         }],
-        "stage-2"
+        'stage-2'
       ],
-      plugins: ["transform-runtime"],
+      plugins: ['transform-runtime'],
       comments: false,
     }
   }];
@@ -208,10 +208,8 @@ var prodWebpackCfg = function ()
         return (
           module.resource &&
           /\.js$/.test(module.resource) &&
-          module.resource.indexOf(
-            resolve('node_modules')
-          ) === 0
-        )
+          module.resource.indexOf(resolve('node_modules')) === 0
+        );
       }
     }),
     new Webpack.optimize.CommonsChunkPlugin({
