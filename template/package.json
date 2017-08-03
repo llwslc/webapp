@@ -7,7 +7,6 @@
     "postinstall": "npm run init postinstall",
     "init": "node tasks/init.js",
     "dev": "node tasks/webpack.js dev",
-    "pack": "node tasks/webpack.js pack",
     "build": "node tasks/webpack.js build",
     "start": "node tasks/server.js server",
 {{#if_eq dbCfg "mongoose"}}

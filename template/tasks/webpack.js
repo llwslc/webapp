@@ -15,36 +15,38 @@ var resolve = function (dir)
   return path.join(__dirname, '..', webpackDir, dir);
 };
 
-var specialWebpack = function (cfg, cb)
+var specialWebpack = function (cfg, build)
 {
-  return Webpack(cfg, function (err, stats)
+  var compiler = Webpack(cfg);
+
+  if (!!build)
   {
-    var hasErrs = false;
-    if (err)
+    compiler.run(function (err, stats)
     {
-      hasErrs = true;
-      util.webpackLog.error(err.stack || err);
-      if (err.details)
+      if (err)
       {
-        util.webpackLog.error(err.details);
+        util.webpackLog.error(err.stack || err);
+        if (err.details)
+        {
+          util.webpackLog.error(err.details);
+        }
       }
-    }
-    else
-    {
-      if (stats.hasErrors())
+      else
       {
-        hasErrs = true;
-        stats.compilation.errors.forEach(function (err) {util.webpackLog.error(err)});
-      }
+        if (stats.hasErrors())
+        {
+          stats.compilation.errors.forEach(function (err) {util.webpackLog.error(err)});
+        }
 
-      if (stats.hasWarnings())
-      {
-        stats.compilation.warnings.forEach(function (err) {util.webpackLog.warn(err)});
+        if (stats.hasWarnings())
+        {
+          stats.compilation.warnings.forEach(function (err) {util.webpackLog.warn(err)});
+        }
       }
-    }
+    });
+  }
 
-    cb(hasErrs);
-  });
+  return compiler;
 };
 
 var baseWebpackCfg = function ()
@@ -178,16 +180,6 @@ var devHotWebpackCfg = function ()
   return baseCfg;
 };
 
-var devPackWebpackCfg = function ()
-{
-  var baseCfg = baseWebpackCfg();
-  baseCfg.devtool = '#source-map';
-  baseCfg.plugins.push(new Webpack.DefinePlugin({
-    'process.env': '"development"'
-  }));
-  return baseCfg;
-};
-
 var prodWebpackCfg = function ()
 {
   var baseCfg = baseWebpackCfg();
@@ -231,14 +223,9 @@ var startDevServer = function ()
 
   var webpackConfig = devHotWebpackCfg();
 
-  var compiler = specialWebpack(webpackConfig, function (hasErrs)
-  {
-    if (!hasErrs)
-    {
-      opn(`http://localhost:${config.webpackDev.port}`);
-    }
-  });
+  WebpackDevServer.addDevServerEntrypoints(webpackConfig, {host: 'localhost', port: config.webpackDev.port, hot: true});
 
+  var compiler = specialWebpack(webpackConfig);
   var server = new WebpackDevServer(compiler,
   {
     contentBase: resolve('src'),
@@ -250,22 +237,19 @@ var startDevServer = function ()
     disableHostCheck: true,
     proxy: config.webpackDev.proxy
   });
+  server.openUrl = true;
+  compiler.plugin('done', () =>
+  {
+    if (server.openUrl)
+    {
+      opn(`http://localhost:${config.webpackDev.port}`);
+      server.openUrl = false;
+    }
+  });
 
   server.listen(config.webpackDev.port, function ()
   {
     util.webpackLog.info(`Dev server listening at ${config.webpackDev.port}, waiting for compiler...`);
-  });
-};
-
-var startPackServer = function ()
-{
-  util.webpackLog.info(`Starting...`);
-
-  var webpackConfig = devPackWebpackCfg();
-
-  specialWebpack(webpackConfig, function ()
-  {
-    util.webpackLog.info('Build complete.\n');
   });
 };
 
@@ -277,9 +261,10 @@ var webpackBuild = function ()
 
   util.delDirAsync(util.webpackLog, resolve('dist'), function ()
   {
-    specialWebpack(webpackConfig, function ()
+    var compiler = specialWebpack(webpackConfig, true);
+    compiler.plugin('done', () =>
     {
-      util.webpackLog.info('Build complete.\n');
+      util.webpackLog.info(`Build complete.\n`);
     });
   });
 };
@@ -294,10 +279,6 @@ if (!!process.argv[3])
 if (process.argv[2] == 'dev')
 {
   startDevServer();
-}
-else if (process.argv[2] == 'pack')
-{
-  startPackServer();
 }
 else if (process.argv[2] == 'build')
 {
