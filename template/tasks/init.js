@@ -33,9 +33,9 @@ var initAllPackage = function ()
     var wfunc = function (res, cb)
     {
       waterIndex++;
-      initPackage(allPackage[waterIndex], cb)
+      initPackage(allPackage[waterIndex], cb);
     };
-    waterfallFuncArr.push(wfunc)
+    waterfallFuncArr.push(wfunc);
   }
 
   async.waterfall(waterfallFuncArr, function (err, res)

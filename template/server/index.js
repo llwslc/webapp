@@ -12,10 +12,7 @@ const app = express();
 const serverPort = config.express.port;
 const jwtUnless = {
   path: [
-    '/',
-    '/getToken',
-    '/delToken',
-    {url: /^\/assets*/},
+    {url: /^(?!\/api)/},
     '/api/account/login',
     '/api/account/register',
     {url: /(.*)/, methods: ['OPTIONS']}

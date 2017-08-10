@@ -21,12 +21,12 @@ var dbRun = function (db, sql)
     }
     else if (/^INSERT/i.test(sql))
     {
-      res.push({_id: stmt.run().lastInsertROWID})
+      res.push({_id: stmt.run().lastInsertROWID});
     }
   }
   catch (err)
   {
-    console.log(err.message)
+    console.log(err.message);
   }
 
   return res;
