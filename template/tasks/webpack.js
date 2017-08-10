@@ -223,7 +223,7 @@ var startDevServer = function ()
 
   var webpackConfig = devHotWebpackCfg();
 
-  WebpackDevServer.addDevServerEntrypoints(webpackConfig, {host: 'localhost', port: config.webpackDev.port, hot: true});
+  WebpackDevServer.addDevServerEntrypoints(webpackConfig, {host: 'localhost', port: config.webpackDev.port.webpackDir, hot: true});
 
   var compiler = specialWebpack(webpackConfig);
   var server = new WebpackDevServer(compiler,

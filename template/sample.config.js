@@ -9,7 +9,7 @@ var config = {
 
   // webpack-dev-server config
   webpackDev: {
-    port: 8080,
+    port: {client: 8080},
     proxy: {
       '/api': {
         target: 'http://localhost:3000'
