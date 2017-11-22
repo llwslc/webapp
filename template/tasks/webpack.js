@@ -183,13 +183,16 @@ var devHotWebpackCfg = function ()
 var prodWebpackCfg = function ()
 {
   var baseCfg = baseWebpackCfg();
+
   baseCfg.plugins.push(
     new Webpack.LoaderOptionsPlugin({
       minimize: true
     }),
     new Webpack.optimize.UglifyJsPlugin({
       compress: {
-        warnings: false
+        warnings: false,
+        drop_debugger: true,
+        drop_console: true
       }
     }),
     new Webpack.optimize.CommonsChunkPlugin({
@@ -200,7 +203,9 @@ var prodWebpackCfg = function ()
         return (
           module.resource &&
           /\.js$/.test(module.resource) &&
-          module.resource.indexOf(resolve('node_modules')) === 0
+          module.resource.indexOf(
+            resolve('node_modules')
+          ) === 0
         );
       }
     }),
@@ -222,8 +227,9 @@ var startDevServer = function ()
   util.webpackLog.info(`Starting...`);
 
   var webpackConfig = devHotWebpackCfg();
+  var port = config.webpackDev.port[webpackDir];
 
-  WebpackDevServer.addDevServerEntrypoints(webpackConfig, {host: 'localhost', port: config.webpackDev.port.webpackDir, hot: true});
+  WebpackDevServer.addDevServerEntrypoints(webpackConfig, {host: 'localhost', port: port, hot: true});
 
   var compiler = specialWebpack(webpackConfig);
   var server = new WebpackDevServer(compiler,
@@ -242,14 +248,14 @@ var startDevServer = function ()
   {
     if (server.openUrl)
     {
-      opn(`http://localhost:${config.webpackDev.port}`);
+      opn(`http://localhost:${port}`);
       server.openUrl = false;
     }
   });
 
-  server.listen(config.webpackDev.port, function ()
+  server.listen(port, function ()
   {
-    util.webpackLog.info(`Dev server listening at ${config.webpackDev.port}, waiting for compiler...`);
+    util.webpackLog.info(`Dev server listening at ${port}, waiting for compiler...`);
   });
 };
 
